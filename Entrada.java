@@ -144,7 +144,7 @@ public class Entrada {
 		return miBoolean;
 	}
 
-	private static Path LlegirPath(String missatge) {
+	private static Path llegirPath(String missatge) {
 		Path path = null;
 		boolean success = false;
 		do {
