@@ -18,7 +18,7 @@ public class Csv implements Iterable<String[]>{
 		return this.path;
 	}
 	
-	public static Collection<String[]> toCollection(Collection<String[]> c, Path path) throws IOException {
+	public static Collection<String[]> toCollection(Path path) throws IOException {
 		c.clear();
 		try (Scanner fitxer = new Scanner(Files.newBufferedReader(path))){
 			while(fitxer.hasNext()) {
