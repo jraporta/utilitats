@@ -3,6 +3,7 @@ package utilitats;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 public class Entrada {
@@ -144,20 +145,26 @@ public class Entrada {
 		return miBoolean;
 	}
 
-	private static Path llegirPath(String missatge) {
+	private static Path llegirPath(String missatge, String exitMsg) {
 		Path path = null;
-		boolean success = false;
 		do {
-			String answer = Entrada.llegirString(missatge);
-			path = Path.of(answer);
-			success = Files.isReadable(path);
-			if (!success) {
-				path = Path.of(System.getProperty("user.dir") + answer);
-				success = Files.isReadable(path);
-				if (!success) System.out.println("Ruta no vàlida!");
+			boolean abort = false;
+			String lectura = Entrada.llegirString(missatge);
+			abort = lectura.equalsIgnoreCase(exitMsg);
+			if (!abort){
+				path = Path.of(lectura);
+				try{
+					path = path.toRealPath(true);
+				}catch(NoSuchFileException e){
+					System.out.println("Ruta no vàlida!");
+				}
 			}
-		}while(!success);
+		}while(!Files.isReadable(path) && !abort);
 		return path;
+	}
+
+	private static Path llegirPath(String missatge){
+		return llegirPath(missatge, "exit");
 	}
 	
 	public static void close() {
